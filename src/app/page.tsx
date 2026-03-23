@@ -1,0 +1,122 @@
+'use client';
+
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { BookingForm } from '@/components/booking-form';
+import { SiteHeader } from '@/components/site-header';
+
+const PRICE_IMAGE_SRC = '/price-services.jpg';
+
+export default function Home() {
+  const [isPriceOpen, setIsPriceOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isPriceOpen) {
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsPriceOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isPriceOpen]);
+
+  function scrollToBookingSection() {
+    const bookingSection = document.getElementById('booking');
+
+    bookingSection?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  }
+
+  return (
+    <div className="relative min-h-screen overflow-hidden">
+      <div className="pointer-events-none absolute inset-x-0 top-[-8rem] h-[22rem] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.8),transparent_62%)]" />
+      <SiteHeader />
+      <main className="mx-auto w-full max-w-5xl px-4 pb-8 pt-6 sm:px-6 sm:pb-12 sm:pt-8 lg:px-8">
+        <section className="w-full">
+          <div className="relative overflow-hidden rounded-[36px] bg-[#171515] shadow-[0_28px_90px_rgba(15,10,10,0.24)]">
+            <Image
+              src="/Frame%2042.png"
+              alt="Онлайн-запись на маникюр"
+              width={862}
+              height={524}
+              priority
+              className="h-auto w-full object-cover"
+            />
+            <div className="absolute left-[14%] top-[24%] z-10 flex flex-col gap-8 sm:left-[12.5%] sm:top-[23%] sm:gap-9 lg:left-[11.5%] lg:top-[22%]">
+              <button
+                type="button"
+                onClick={scrollToBookingSection}
+                className="flex h-[52px] w-[170px] items-center justify-center whitespace-nowrap rounded-full bg-[#ff929b] px-6 tracking-[-0.03em] text-[#201514] shadow-[0_16px_30px_rgba(255,146,155,0.24)] transition hover:-translate-y-0.5 hover:bg-[#ff9ea7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/55 sm:h-[62px] sm:w-[220px] lg:h-[70px] lg:w-[270px]"
+                style={{ fontSize: '1.5rem', lineHeight: 1 }}
+              >
+                онлайн запись
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsPriceOpen(true)}
+                aria-haspopup="dialog"
+                aria-expanded={isPriceOpen}
+                className="flex h-[52px] w-[170px] items-center justify-center rounded-full bg-[#d9d9db] px-6 text-[#ff7893] shadow-[0_16px_30px_rgba(255,255,255,0.18)] transition hover:-translate-y-0.5 hover:bg-[#e7e7e9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/55 sm:h-[62px] sm:w-[220px] lg:h-[70px] lg:w-[270px]"
+              >
+                <span className="block origin-center text-[1.55rem] font-semibold leading-none tracking-[-0.04em] scale-[1.45] sm:text-[1.7rem] sm:scale-[1.55] lg:text-[1.85rem] lg:scale-[1.62]">
+                  Price
+                </span>
+              </button>
+            </div>
+          </div>
+          <div className="relative z-10 mt-[-24px] w-full sm:mt-[-56px]">
+            <BookingForm />
+          </div>
+        </section>
+      </main>
+
+      {isPriceOpen ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/78 p-4 backdrop-blur-sm sm:p-6"
+          onClick={() => setIsPriceOpen(false)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Прайс услуг"
+            className="relative w-full max-w-[760px]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setIsPriceOpen(false)}
+              aria-label="Закрыть прайс"
+              className="absolute right-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-[#171515]/88 text-2xl leading-none text-white shadow-[0_16px_30px_rgba(0,0,0,0.3)] transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/55"
+            >
+              ×
+            </button>
+            <div className="overflow-hidden rounded-[30px] bg-white shadow-[0_28px_80px_rgba(0,0,0,0.34)]">
+              <Image
+                src={PRICE_IMAGE_SRC}
+                alt="Прайс услуг"
+                width={720}
+                height={1041}
+                className="h-auto max-h-[85vh] w-full object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}

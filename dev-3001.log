@@ -1,0 +1,28 @@
+
+> manicure-booking@0.1.0 dev
+> next dev --port 3001
+
+▲ Next.js 16.2.1 (Turbopack)
+- Local:         http://localhost:3001
+- Network:       http://198.18.0.1:3001
+✓ Ready in 1439ms
+Creating turbopack project {
+  dir: 'C:\\Users\\Admin\\manicure-booking\\manicure-booking',
+  testMode: true
+}
+
+ GET /api/bookings?date=2026-03-23 200 in 1524ms (next.js: 1461ms, application-code: 63ms)
+ POST /api/bookings 201 in 40ms (next.js: 11ms, application-code: 28ms)
+○ Compiling / ...
+ GET / 200 in 4.5s (next.js: 4.1s, application-code: 470ms)
+ GET / 200 in 196ms (next.js: 15ms, application-code: 181ms)
+ GET /api/bookings?date=2026-03-23 200 in 29ms (next.js: 9ms, application-code: 20ms)
+✓ Compiled in 110ms
+✓ Compiled in 67ms
+✓ Compiled in 82ms
+✓ Compiled in 74ms
+ GET /api/bookings?date=2026-03-23 200 in 181ms (next.js: 144ms, application-code: 36ms)
+✓ Compiled in 113ms
+ GET / 200 in 240ms (next.js: 144ms, application-code: 96ms)
+ POST /api/bookings 400 in 182ms (next.js: 92ms, application-code: 90ms)
+^C
