@@ -361,7 +361,7 @@ export function BookingForm() {
   return (
     <section
       id="booking"
-      className="scroll-mt-24 rounded-[32px] border border-card-border bg-paper-strong p-6 shadow-[0_30px_90px_rgba(75,40,28,0.12)] sm:p-8"
+      className="scroll-mt-24 rounded-[32px] bg-[#fffaf5] p-6 shadow-[0_30px_90px_rgba(75,40,28,0.12)] sm:p-8"
     >
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
         <div className="min-w-0">

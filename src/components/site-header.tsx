@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const CHANNEL_URL = "https://t.me/nailsss_21";
 const PROFILE_URL = "https://t.me/agxvjo";
 
@@ -23,20 +25,26 @@ export function SiteHeader() {
           rel="noreferrer"
           className="group flex min-w-0 items-center gap-3 rounded-full pr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
         >
-          <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_30%,#ffd7dc,#f4b9c3_48%,#d39ca6_100%)] text-[10px] font-semibold uppercase tracking-[0.22em] text-white shadow-[inset_0_1px_3px_rgba(255,255,255,0.55)]">
-            photo
+          <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full bg-[#f4d1d7] shadow-[0_10px_22px_rgba(211,156,166,0.24)]">
+            <Image
+              src="/nav-avatar.jpg"
+              alt="Фото профиля nailsss_21"
+              fill
+              sizes="56px"
+              className="object-cover"
+            />
           </span>
           <span className="truncate text-lg text-foreground transition group-hover:text-accent">
             nailsss_21
           </span>
         </a>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <a
             href={PROFILE_URL}
             target="_blank"
             rel="noreferrer"
-            className="rounded-full px-2 py-1 text-base text-foreground transition hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 sm:text-lg"
+            className="rounded-full px-1 py-1 text-base text-foreground transition hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 sm:text-lg"
           >
             @agxvjo
           </a>
