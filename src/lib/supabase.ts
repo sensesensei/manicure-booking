@@ -9,8 +9,14 @@ type SupabaseEnv = {
 export function getSupabaseEnv(): SupabaseEnv {
   return {
     url: process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() ?? "",
-    anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() ?? "",
-    serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ?? "",
+    anonKey:
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() ??
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY?.trim() ??
+      "",
+    serviceRoleKey:
+      process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ??
+      process.env.SUPABASE_SECRET_KEY?.trim() ??
+      "",
   };
 }
 
@@ -24,7 +30,7 @@ export function getSupabaseHeaders(returnRepresentation = false) {
   const apiKey = serviceRoleKey || anonKey;
 
   if (!apiKey) {
-    throw new Error("Не найден ключ Supabase. Добавь anon или service role ключ.");
+    throw new Error("Не найден ключ Supabase. Добавь anon или server key.");
   }
 
   return {
@@ -35,7 +41,7 @@ export function getSupabaseHeaders(returnRepresentation = false) {
   };
 }
 
-export function getSupabaseTableUrl(query = "") {
+export function getSupabaseResourceUrl(resource: string, query = "") {
   const { url } = getSupabaseEnv();
 
   if (!url) {
@@ -43,5 +49,9 @@ export function getSupabaseTableUrl(query = "") {
   }
 
   const suffix = query ? `?${query}` : "";
-  return `${url}/rest/v1/${BOOKINGS_TABLE}${suffix}`;
+  return `${url}/rest/v1/${resource}${suffix}`;
+}
+
+export function getSupabaseTableUrl(query = "") {
+  return getSupabaseResourceUrl(BOOKINGS_TABLE, query);
 }

@@ -21,10 +21,39 @@ export type BookingValidationResult = {
   errors: string[];
 };
 
-export type BookingsListResponse = {
+export type DayAvailabilityState = {
+  date: string;
+  isClosed: boolean;
+  isDisabled: boolean;
+  freeSlotsCount: number;
+  totalSlotsCount: number;
+};
+
+export type DayAvailabilityConfig = {
+  date: string;
+  isClosed: boolean;
+  usesDefaultSchedule: boolean;
+  availableTimes: string[];
+  bookedTimes: string[];
+};
+
+export type BookingsAvailabilityResponse = {
+  date: string;
+  slots: Slot[];
+  storageMode: StorageMode;
+};
+
+export type AvailabilityWindowResponse = {
+  start: string;
+  duration: number;
+  days: DayAvailabilityState[];
+  storageMode: StorageMode;
+};
+
+export type AdminBookingsListResponse = {
   date: string;
   bookings: BookingRecord[];
-  slots: Slot[];
+  availability: DayAvailabilityConfig;
   storageMode: StorageMode;
 };
 
@@ -33,4 +62,16 @@ export type BookingCreateResponse = {
   storageMode: StorageMode;
   telegramDelivered: boolean;
   telegramWarning?: string;
+};
+
+export type BookingDeleteResponse = {
+  booking: BookingRecord;
+  storageMode: StorageMode;
+  telegramDelivered?: boolean;
+  telegramWarning?: string;
+};
+
+export type DayAvailabilityUpdateResponse = {
+  availability: DayAvailabilityConfig;
+  storageMode: StorageMode;
 };

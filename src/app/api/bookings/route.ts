@@ -1,8 +1,18 @@
 import { NextResponse } from "next/server";
-import { sendTelegramNotification } from "@/lib/telegram";
-import { createBooking, listBookingsByDate } from "@/lib/supabase-server";
+import {
+  buildTelegramConfigErrorMessage,
+  sendBookingCreatedNotification,
+} from "@/lib/telegram";
+import {
+  createBooking,
+  getDayAvailabilityConfig,
+  listBookingsByDate,
+} from "@/lib/supabase-server";
 import { buildSlots, parseLocalDate, validateBookingInput } from "@/lib/utils";
-import type { BookingCreateResponse, BookingsListResponse } from "@/types/booking";
+import type {
+  BookingCreateResponse,
+  BookingsAvailabilityResponse,
+} from "@/types/booking";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -19,10 +29,10 @@ export async function GET(request: Request) {
 
   try {
     const { bookings, storageMode } = await listBookingsByDate(date);
-    const response: BookingsListResponse = {
+    const { availability } = await getDayAvailabilityConfig(date, bookings);
+    const response: BookingsAvailabilityResponse = {
       date,
-      bookings,
-      slots: buildSlots(date, bookings),
+      slots: buildSlots(date, bookings, availability.availableTimes),
       storageMode,
     };
 
@@ -66,7 +76,7 @@ export async function POST(request: Request) {
 
   try {
     const { booking, storageMode } = await createBooking(validation.data);
-    const telegramResult = await sendTelegramNotification(booking, storageMode);
+    const telegramResult = await sendBookingCreatedNotification(booking, storageMode);
 
     const response: BookingCreateResponse = {
       booking,
@@ -75,10 +85,7 @@ export async function POST(request: Request) {
       ...(telegramResult.delivered
         ? {}
         : {
-            telegramWarning:
-              telegramResult.reason === "missing_config"
-                ? "Запись сохранена, но Telegram пока не настроен."
-                : "Запись сохранена, но Telegram не смог принять уведомление.",
+            telegramWarning: `Запись сохранена, но ${buildTelegramConfigErrorMessage(telegramResult).toLowerCase()}`,
           }),
     };
 
@@ -96,7 +103,7 @@ export async function POST(request: Request) {
         error: message,
       },
       {
-        status: message.includes("слот уже занят") ? 409 : 500,
+        status: message.toLowerCase().includes("слот уже занят") ? 409 : 500,
       },
     );
   }

@@ -1,0 +1,8 @@
+⨯ Another next dev server is already running.
+
+- Local:        http://localhost:3000
+- PID:          17888
+- Dir:          C:\Users\Admin\manicure-booking\manicure-booking
+- Log:          .next\dev\logs\next-development.log
+
+Run taskkill /PID 17888 /F to stop it.

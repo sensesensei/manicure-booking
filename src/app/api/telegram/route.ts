@@ -1,59 +1,79 @@
 import { NextResponse } from "next/server";
-import { sendTelegramNotification } from "@/lib/telegram";
-import { validateBookingInput } from "@/lib/utils";
-import type { BookingRecord, StorageMode } from "@/types/booking";
+import { hasAdminPasswordConfig, hasAdminSession } from "@/lib/admin-auth";
+import { hasSupabaseServerConfig } from "@/lib/supabase";
+import {
+  buildTelegramConfigErrorMessage,
+  getTelegramConfigState,
+  sendTelegramTestNotification,
+} from "@/lib/telegram";
+import type {
+  TelegramStatusResponse,
+  TelegramTestResponse,
+} from "@/types/telegram";
 
-export async function POST(request: Request) {
-  let body: unknown;
-
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json(
-      {
-        error: "Тело запроса должно быть в формате JSON.",
-      },
-      { status: 400 },
-    );
-  }
-
-  const validation = validateBookingInput(body);
-
-  if (!validation.data || validation.errors.length > 0) {
+async function authorizeAdminTelegramRoute() {
+  if (!hasAdminPasswordConfig()) {
     return NextResponse.json(
       {
         error:
-          validation.errors[0] ??
-          "Для Telegram нужен тот же набор данных, что и для записи.",
+          "Админ-пароль ещё не настроен. Добавь ADMIN_PASSWORD в .env.local и перезапусти сервер.",
       },
-      { status: 400 },
+      { status: 503 },
     );
   }
 
-  const input = body as { storageMode?: StorageMode };
-  const booking: BookingRecord = {
-    ...validation.data,
-    id: "preview",
-    createdAt: new Date().toISOString(),
+  if (!(await hasAdminSession())) {
+    return NextResponse.json(
+      {
+        error: "Требуется вход в админку.",
+      },
+      { status: 401 },
+    );
+  }
+
+  return null;
+}
+
+function getStorageMode() {
+  return hasSupabaseServerConfig() ? "supabase" : "demo";
+}
+
+export async function GET() {
+  const authResponse = await authorizeAdminTelegramRoute();
+
+  if (authResponse) {
+    return authResponse;
+  }
+
+  const configState = getTelegramConfigState();
+  const response: TelegramStatusResponse = {
+    configured: configState.configured,
+    missingFields: configState.missingFields,
+    storageMode: getStorageMode(),
   };
 
-  const result = await sendTelegramNotification(
-    booking,
-    input.storageMode === "supabase" ? "supabase" : "demo",
-  );
+  return NextResponse.json(response);
+}
 
-  return NextResponse.json(
-    result.delivered
-      ? result
-      : {
-          ...result,
-          error:
-            result.reason === "missing_config"
-              ? "Telegram не настроен. Заполни TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID."
-              : "Telegram вернул ошибку при отправке.",
-        },
-    {
-      status: result.delivered ? 200 : 503,
-    },
-  );
+export async function POST() {
+  const authResponse = await authorizeAdminTelegramRoute();
+
+  if (authResponse) {
+    return authResponse;
+  }
+
+  const result = await sendTelegramTestNotification(getStorageMode());
+  const response: TelegramTestResponse = result.delivered
+    ? {
+        delivered: true,
+      }
+    : {
+        delivered: false,
+        error: buildTelegramConfigErrorMessage(result),
+        ...(result.details ? { details: result.details } : {}),
+      };
+
+  return NextResponse.json(response, {
+    status: result.delivered ? 200 : 503,
+  });
 }

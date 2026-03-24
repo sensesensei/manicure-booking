@@ -9,8 +9,9 @@
 - Обязательные поля: имя, телефон, Telegram, дата и время.
 - `GET /api/bookings` для загрузки занятых окон.
 - `POST /api/bookings` для создания записи и отправки Telegram-уведомления.
-- `POST /api/telegram` для отдельного теста Telegram-уведомления.
+- `POST /api/telegram` для теста Telegram-уведомления из защищённой админки.
 - Автоматический demo-режим, если Supabase ещё не настроен.
+- `/admin` для просмотра записей, управления доступностью и теста Telegram.
 
 ## Запуск
 
@@ -28,9 +29,13 @@ npm run dev
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
+SUPABASE_SECRET_KEY=
 TELEGRAM_BOT_TOKEN=
 TELEGRAM_CHAT_ID=
+ADMIN_PASSWORD=
+ADMIN_SESSION_SECRET=
 ```
 
 Если переменные Supabase не заполнены, проект будет работать в demo-режиме и хранить записи только в памяти процесса.
@@ -72,6 +77,7 @@ alter table public.bookings
 2. Получи `TELEGRAM_BOT_TOKEN`.
 3. Узнай `chat_id` личного чата или канала.
 4. После брони приложение вызовет Telegram Bot API и отправит карточку записи, включая Telegram клиента.
+5. Тест Telegram можно отправить прямо из админки после входа.
 
 ## Структура
 

@@ -17,7 +17,7 @@ const weekdayFormatter = new Intl.DateTimeFormat("ru-RU", {
   weekday: "short",
 });
 
-function normalizeWhitespace(value: string) {
+export function normalizeWhitespace(value: string) {
   return value.replace(/\s+/g, " ").trim();
 }
 
@@ -31,6 +31,33 @@ function normalizeTelegram(value: string) {
 
   const withoutAt = trimmed.startsWith("@") ? trimmed.slice(1) : trimmed;
   return withoutAt ? `@${withoutAt}` : "";
+}
+
+export function isValidTimeValue(value: string) {
+  return /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value);
+}
+
+export function sortTimes(times: string[]) {
+  return [...times].sort((left, right) => left.localeCompare(right));
+}
+
+export function normalizeAvailableTimes(times: string[]) {
+  const uniqueTimes = new Set(
+    times.map((value) => value.trim()).filter((value) => isValidTimeValue(value)),
+  );
+
+  return sortTimes(Array.from(uniqueTimes));
+}
+
+export function areTimeSetsEqual(left: string[], right: string[]) {
+  const normalizedLeft = normalizeAvailableTimes(left);
+  const normalizedRight = normalizeAvailableTimes(right);
+
+  if (normalizedLeft.length !== normalizedRight.length) {
+    return false;
+  }
+
+  return normalizedLeft.every((value, index) => value === normalizedRight[index]);
 }
 
 export function formatDateToISO(date: Date) {
@@ -90,10 +117,23 @@ export function getUpcomingDays(count = BOOKING_WINDOW_DAYS) {
   });
 }
 
+export function addDaysToISODate(date: string, offset: number) {
+  const parsed = parseLocalDate(date);
+
+  if (!parsed) {
+    throw new Error("Не удалось прибавить дни: дата должна быть в формате YYYY-MM-DD.");
+  }
+
+  const nextDate = new Date(parsed);
+  nextDate.setDate(parsed.getDate() + offset);
+
+  return formatDateToISO(nextDate);
+}
+
 export function isPastSlot(date: string, time: string) {
   const parsedDate = parseLocalDate(date);
 
-  if (!parsedDate) {
+  if (!parsedDate || !isValidTimeValue(time)) {
     return true;
   }
 
@@ -104,10 +144,15 @@ export function isPastSlot(date: string, time: string) {
   return candidate.getTime() <= Date.now();
 }
 
-export function buildSlots(date: string, bookings: BookingRecord[]): Slot[] {
+export function buildSlots(
+  date: string,
+  bookings: BookingRecord[],
+  availableTimes: string[] = [...WORKING_HOURS],
+): Slot[] {
+  const normalizedTimes = normalizeAvailableTimes(availableTimes);
   const bookedTimes = new Set(bookings.map((booking) => booking.bookingTime));
 
-  return WORKING_HOURS.map((time) => {
+  return normalizedTimes.map((time) => {
     const status = bookedTimes.has(time)
       ? "booked"
       : isPastSlot(date, time)
@@ -183,14 +228,12 @@ export function validateBookingInput(input: unknown): BookingValidationResult {
     maxDate.setDate(today.getDate() + BOOKING_WINDOW_DAYS - 1);
 
     if (parsedDate < today || parsedDate > maxDate) {
-      errors.push(
-        `Дата должна быть в пределах ближайших ${BOOKING_WINDOW_DAYS} дней.`,
-      );
+      errors.push(`Дата должна быть в пределах ближайших ${BOOKING_WINDOW_DAYS} дней.`);
     }
   }
 
-  if (!WORKING_HOURS.includes(bookingTime as (typeof WORKING_HOURS)[number])) {
-    errors.push("Выбери время из предложенных слотов.");
+  if (!isValidTimeValue(bookingTime)) {
+    errors.push("Выбери время в формате HH:MM.");
   }
 
   if (parsedDate && bookingTime && isPastSlot(bookingDate, bookingTime)) {

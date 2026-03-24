@@ -1,5 +1,6 @@
 export const APP_NAME = "Nail Diary";
 export const BOOKINGS_TABLE = "bookings";
+export const AVAILABILITY_OVERRIDES_TABLE = "availability_overrides";
 export const BOOKING_WINDOW_DAYS = 14;
 
 export const WORKING_HOURS = [

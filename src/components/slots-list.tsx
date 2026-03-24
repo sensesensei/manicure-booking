@@ -47,15 +47,18 @@ export function SlotsList({
         const isBooked = slot.status === "booked";
         const isPast = slot.status === "past";
 
+        const appearanceClassName = isActive
+          ? "cursor-pointer border-accent bg-[#fff0e5] shadow-[0_18px_36px_rgba(185,109,82,0.2)] ring-2 ring-accent/15"
+          : isBooked
+            ? "cursor-not-allowed border-danger/25 bg-danger-soft/50 text-muted/80"
+            : isPast
+              ? "cursor-not-allowed border-card-border bg-[#f0e8e2] text-muted/80"
+              : "cursor-pointer border-card-border bg-white hover:-translate-y-0.5 hover:border-accent/55 hover:bg-[#fff8f1]";
+
         const className = [
           "rounded-[22px] border p-4 text-left shadow-[0_10px_28px_rgba(95,65,52,0.06)]",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40",
-          slot.isDisabled
-            ? "cursor-not-allowed border-card-border bg-white/45 text-muted/80"
-            : "cursor-pointer border-card-border bg-white hover:-translate-y-0.5 hover:border-accent/55 hover:bg-[#fff8f1]",
-          isActive ? "border-accent bg-[#fff0e5] shadow-[0_16px_34px_rgba(185,109,82,0.16)]" : "",
-          isBooked ? "border-danger/25 bg-danger-soft/50" : "",
-          isPast ? "border-card-border bg-[#f0e8e2]" : "",
+          appearanceClassName,
         ].join(" ");
 
         return (
