@@ -233,8 +233,7 @@ export function AdminAvailabilityEditor({
             <div className="mt-4 space-y-3">
               <div className="rounded-[18px] border border-danger/20 bg-danger-soft/70 px-4 py-3 text-sm leading-6 text-danger">
                 День закрыт для новых записей. Клиент не сможет выбрать эту
-                дату, но уже существующие записи сохранятся. Сохраните
-                изменения!
+                дату, но уже существующие записи сохранятся.
               </div>
 
               {bookings.length > 0 ? (
