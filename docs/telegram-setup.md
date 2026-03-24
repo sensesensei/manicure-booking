@@ -49,13 +49,13 @@ TELEGRAM_CHAT_ID=your_chat_id
 
 Then restart the local server.
 
-## 5. Verify from the admin page
+## 5. Verify with a real booking flow
 
-1. Open `/admin`.
-2. Go to the Telegram panel.
-3. Confirm the status badge changes to `configured`.
-4. Click the Telegram test button.
-5. Check that the message appears in the target chat.
+1. Open the landing page.
+2. Create a test booking with valid contact data.
+3. Check that the message appears in the target Telegram chat.
+4. Open `/admin` and delete that test booking.
+5. Check that the deletion message also appears in Telegram.
 
 ## 6. Common problems
 
@@ -69,5 +69,4 @@ Then restart the local server.
 ## 7. Production checklist
 
 - keep the bot token only in server-side env vars
-- use the admin test panel before demo or deployment
 - verify both booking creation and booking deletion notifications

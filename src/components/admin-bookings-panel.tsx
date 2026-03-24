@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { startTransition, useEffect, useEffectEvent, useState } from "react";
 import { AdminAvailabilityEditor } from "@/components/admin-availability-editor";
 import { AdminLogoutButton } from "@/components/admin-logout-button";
-import { AdminTelegramPanel } from "@/components/admin-telegram-panel";
 import { formatDateLabel } from "@/lib/utils";
 import type {
   AdminBookingsListResponse,
@@ -297,8 +296,6 @@ export function AdminBookingsPanel({ initialDate }: AdminBookingsPanelProps) {
           {status.message}
         </div>
       ) : null}
-
-      <AdminTelegramPanel />
 
       <AdminAvailabilityEditor
         key={selectedDate}

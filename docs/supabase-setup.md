@@ -77,6 +77,5 @@ The project already includes:
 - day availability editor
 - Telegram notifications for created bookings
 - Telegram notifications for deleted bookings
-- Telegram test message from the admin page
 
 For the Telegram part, follow the dedicated guide in `docs/telegram-setup.md`.

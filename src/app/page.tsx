@@ -59,23 +59,25 @@ export default function Home() {
               priority
               className="h-auto w-full object-cover"
             />
-            <div className="absolute left-[14%] top-[24%] z-10 flex flex-col gap-8 sm:left-[12.5%] sm:top-[23%] sm:gap-9 lg:left-[11.5%] lg:top-[22%]">
+            <div className="absolute left-[11.5%] top-[24%] z-10 flex flex-col gap-3 md:left-[12.5%] md:top-[23%] md:gap-9 lg:left-[11.5%] lg:top-[22%]">
               <button
                 type="button"
                 onClick={scrollToBookingSection}
-                className="flex h-[52px] w-[170px] items-center justify-center whitespace-nowrap rounded-full bg-[#ff929b] px-6 tracking-[-0.03em] text-[#201514] shadow-[0_16px_30px_rgba(255,146,155,0.24)] transition hover:-translate-y-0.5 hover:bg-[#ff9ea7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/55 sm:h-[62px] sm:w-[220px] lg:h-[70px] lg:w-[270px]"
-                style={{ fontSize: '1.5rem', lineHeight: 1 }}
+                className="flex h-[30px] w-[102px] items-center justify-center whitespace-nowrap rounded-full bg-[#ff929b] px-3 text-[#201514] shadow-[0_8px_16px_rgba(255,146,155,0.2)] transition hover:-translate-y-0.5 hover:bg-[#ff9ea7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/55 md:h-[62px] md:w-[220px] md:px-6 md:shadow-[0_16px_30px_rgba(255,146,155,0.24)] lg:h-[70px] lg:w-[270px]"
+                style={{ lineHeight: 1 }}
               >
+                <span className="block text-[0.6rem] font-normal tracking-[-0.04em] md:text-[1.5rem] md:font-normal lg:text-[1.65rem]">
                 онлайн запись
+                </span>
               </button>
               <button
                 type="button"
                 onClick={() => setIsPriceOpen(true)}
                 aria-haspopup="dialog"
                 aria-expanded={isPriceOpen}
-                className="flex h-[52px] w-[170px] items-center justify-center rounded-full bg-[#d9d9db] px-6 text-[#ff7893] shadow-[0_16px_30px_rgba(255,255,255,0.18)] transition hover:-translate-y-0.5 hover:bg-[#e7e7e9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/55 sm:h-[62px] sm:w-[220px] lg:h-[70px] lg:w-[270px]"
+                className="flex h-[30px] w-[102px] items-center justify-center rounded-full bg-[#d9d9db] px-3 text-[#ff7893] shadow-[0_8px_16px_rgba(255,255,255,0.14)] transition hover:-translate-y-0.5 hover:bg-[#e7e7e9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/55 md:h-[62px] md:w-[220px] md:px-6 md:shadow-[0_16px_30px_rgba(255,255,255,0.18)] lg:h-[70px] lg:w-[270px]"
               >
-                <span className="block origin-center text-[1.55rem] font-semibold leading-none tracking-[-0.04em] scale-[1.45] sm:text-[1.7rem] sm:scale-[1.55] lg:text-[1.85rem] lg:scale-[1.62]">
+                <span className="block origin-center text-[0.98rem] font-semibold leading-none tracking-[-0.04em] scale-100 md:text-[1.7rem] md:scale-[1.55] lg:text-[1.85rem] lg:scale-[1.62]">
                   Price
                 </span>
               </button>
