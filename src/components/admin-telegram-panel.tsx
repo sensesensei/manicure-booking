@@ -224,7 +224,7 @@ export function AdminTelegramPanel() {
           </button>
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-full bg-[#2d1d19] px-5 py-3 text-sm font-medium text-white shadow-[0_14px_28px_rgba(45,29,25,0.18)] disabled:cursor-not-allowed disabled:bg-[#8b746d]"
+            className="inline-flex items-center justify-center rounded-full bg-[#2d1d19] px-5 py-3 text-sm font-medium text-white shadow-[0_14px_28px_rgba(45,29,25,0.18)] hover:-translate-y-0.5 hover:bg-[#3a2722] disabled:cursor-not-allowed disabled:bg-[#8b746d]"
             onClick={() => void handleSendTest()}
             disabled={isSendDisabled}
           >

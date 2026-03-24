@@ -44,7 +44,9 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <div className="pointer-events-none absolute inset-x-0 top-[-8rem] h-[22rem] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.8),transparent_62%)]" />
+      <div className="pointer-events-none absolute inset-x-[-12%] top-[-16rem] h-[38rem] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.72),rgba(255,255,255,0.24)_38%,transparent_78%)] blur-2xl" />
+      <div className="pointer-events-none absolute left-[-8rem] top-[18rem] h-[20rem] w-[20rem] rounded-full bg-[#f2cfbe]/30 blur-[120px]" />
+      <div className="pointer-events-none absolute right-[-8rem] top-[22rem] h-[22rem] w-[22rem] rounded-full bg-[#ddd0e3]/24 blur-[130px]" />
       <SiteHeader />
       <main className="mx-auto w-full max-w-5xl px-4 pb-8 pt-6 sm:px-6 sm:pb-12 sm:pt-8 lg:px-8">
         <section className="w-full">
